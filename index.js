@@ -26,9 +26,7 @@ try {
 
 const app = express();
 // ✅ Health check (Render)
-app.get("/health", (req, res) => {
-  res.status(200).send("ok");
-});
+app.get("/health", (req, res) => res.status(200).send("ok"));
 
 // ✅ Webhook verification (Meta)
 app.get("/webhook", (req, res) => {
