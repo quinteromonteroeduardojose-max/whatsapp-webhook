@@ -14,18 +14,27 @@ const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 
 const PUBLIC_LINK = "https://t.me/MFuturesLab";
 const VIP_PRICE = "39.99 USDT / USD";
-const USDT_ADDRESS = process.env.USDT_TRC20_ADDRESS || "";
+const USDT_ADDRESS = process.env.USDT_TRC20_ADDRESS || "NO_CONFIGURADA";
 
-/* ============================= */
-/* 🔥 HEALTH CHECK (Render) */
-/* ============================= */
+const BUILD_TAG = process.env.BUILD_TAG || "v1";
+
+/* ================================= */
+/* ✅ ROOT (para confirmar deploy) */
+/* ================================= */
+app.get("/", (req, res) => {
+  res.status(200).send(`OK SMART MONEY BOT - ${BUILD_TAG}`);
+});
+
+/* ================================= */
+/* ✅ HEALTH CHECK */
+/* ================================= */
 app.get("/health", (req, res) => {
   res.status(200).send("ok");
 });
 
-/* ============================= */
-/* 🔥 WEBHOOK VERIFICATION (Meta) */
-/* ============================= */
+/* ================================= */
+/* ✅ WEBHOOK VERIFICATION (META) */
+/* ================================= */
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -37,16 +46,16 @@ app.get("/webhook", (req, res) => {
   return res.sendStatus(403);
 });
 
-/* ============================= */
-/* 🔥 SEND MESSAGE FUNCTION */
-/* ============================= */
+/* ================================= */
+/* ✅ SEND WHATSAPP MESSAGE */
+/* ================================= */
 async function sendText(to, text) {
   try {
     await axios.post(
       `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`,
       {
         messaging_product: "whatsapp",
-        to: to,
+        to,
         type: "text",
         text: { body: text }
       },
@@ -62,9 +71,9 @@ async function sendText(to, text) {
   }
 }
 
-/* ============================= */
-/* 🔥 MAIN WEBHOOK */
-/* ============================= */
+/* ================================= */
+/* ✅ MAIN WEBHOOK */
+/* ================================= */
 app.post("/webhook", async (req, res) => {
   res.sendStatus(200); // ACK inmediato
 
@@ -112,9 +121,9 @@ app.post("/webhook", async (req, res) => {
   }
 });
 
-/* ============================= */
-/* 🔥 START SERVER */
-/* ============================= */
+/* ================================= */
+/* ✅ START SERVER */
+/* ================================= */
 app.listen(PORT, () => {
   console.log(`✅ Bot activo. Puerto: ${PORT}`);
 });
