@@ -27,6 +27,19 @@ try {
 const app = express();
 app.use(express.json({ limit: "10mb" }));
 
+// ===============================
+// 🔎 Firma para verificar deploy
+// ===============================
+const BUILD_TAG = process.env.BUILD_TAG || "NO_TAG";
+
+app.get("/", (req, res) => {
+  res.status(200).send(`BOT_SMARTMONEY_OK_${BUILD_TAG}`);
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
 const PORT = process.env.PORT || 3000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "";
 
