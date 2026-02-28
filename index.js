@@ -25,6 +25,23 @@ try {
 } catch (_) {}
 
 const app = express();
+// ✅ Health check (Render)
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
+// ✅ Webhook verification (Meta)
+app.get("/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  if (mode === "subscribe" && token === process.env.VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+  return res.sendStatus(403);
+});
+
 app.use(express.json({ limit: "10mb" }));
 
 const PORT = process.env.PORT || 3000;
