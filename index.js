@@ -618,6 +618,25 @@ async function routeMessage(waId, msg, textRaw) {
 }
 
 app.listen(PORT, () => {
+  // ===============================
+// 🔥 RUTAS DE VERIFICACIÓN
+// ===============================
+
+app.get("/health", (req, res) => {
+  res.status(200).send("ok");
+});
+
+app.get("/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  if (mode === "subscribe" && token === process.env.VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+  return res.sendStatus(403);
+});
+  
   if (!WHATSAPP_TOKEN || !PHONE_NUMBER_ID) {
     console.log("⚠️ Revisa WHATSAPP_TOKEN y PHONE_NUMBER_ID en tu .env");
   }
