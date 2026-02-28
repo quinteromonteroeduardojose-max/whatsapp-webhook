@@ -2,7 +2,7 @@
 // WhatsApp Cloud API Bot - PRODUCCIÓN (Audífonos CO + Paletizadora Inteligente)
 // ============================================================================
 
-import "dotenv/config";
+require("dotenv").config();
 import express from "express";
 import axios from "axios";
 
